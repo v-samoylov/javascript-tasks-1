@@ -42,15 +42,16 @@ romanNumerals[5] = '       '+
                    '  |_|  '+
                    '       ';
 
-function joinAsciiNumerals (indexes_array) {
+function joinAsciiNumerals (indexesArray) {
+    var indexesArray;
+    var result = '';    
     /* j - счетчик строк
        i - счетчик римских цифр и знаков
        c - счетчик  столбцов */
-    var result = '';
     var j = 0;
     while (j < 6) {
-      for (var i = 0; i < indexes_array.length; i++) {
-        var asciiNumeral = romanNumerals[indexes_array[i]];
+      for (var i = 0; i < indexesArray.length; i++) {
+        var asciiNumeral = romanNumerals[indexesArray[i]];
         var numeralWidth = asciiNumeral.length / 6;
         for (var c = j*numeralWidth; c < j*numeralWidth + numeralWidth; c++) {
             result += asciiNumeral[c];
