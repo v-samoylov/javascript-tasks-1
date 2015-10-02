@@ -1,46 +1,50 @@
 var hours = parseInt(process.argv[2]);
 var minutes = parseInt(process.argv[3]);
-var resultIndexes = [];
+
 var arabicNumerals = [1, 5, 10, 50];
-var romanNumerals = ['', '', '', '', '', '']
+var romanNumerals = [
+    '.___.'+
+    '|   |'+
+    '|   |'+
+    '|   |'+
+    '|___|'+
+    '     ',
+    '____   ____'+
+    '\\   \\ /   /'+
+    ' \\   Y   / '+
+    '  \\     /  '+
+    '   \\___/   '+
+    '           ',
+    '____  ___'+
+    '\\   \\/  /'+
+    ' \\     / '+
+    ' /     \\ '+
+    '/___/\\  \\'+
+    '      \\_/',
+    '.___.    '+
+    '|   |    '+
+    '|   |___.'+
+    '|       |'+
+    '|_______|'+
+    '         ',
+    '      '+
+    '|\\   |'+
+    '| \\  |'+
+    '|  \\ |'+
+    '|   \\|'+
+    '      ',
+    '       '+
+    '   _   '+
+    '  |_|  '+
+    '   _   '+
+    '  |_|  '+
+    '       '
+] 
 
-romanNumerals[0] = '.___.'+
-                   '|   |'+
-                   '|   |'+
-                   '|   |'+
-                   '|___|'+
-                   '     ';
-romanNumerals[1] = '____   ____'+
-                   '\\   \\ /   /'+
-                   ' \\   Y   / '+
-                   '  \\     /  '+
-                   '   \\___/   '+
-                   '           ';
-romanNumerals[2] = '____  ___'+
-                   '\\   \\/  /'+
-                   ' \\     / '+
-                   ' /     \\ '+
-                   '/___/\\  \\'+
-                   '      \\_/';
-
-romanNumerals[3] = '.___.    '+
-                   '|   |    '+
-                   '|   |___.'+
-                   '|       |'+
-                   '|_______|'+
-                   '         ';
-romanNumerals[4] = '      '+
-                   '|\\   |'+
-                   '| \\  |'+
-                   '|  \\ |'+
-                   '|   \\|'+
-                   '      ';
-romanNumerals[5] = '       '+
-                   '   _   '+
-                   '  |_|  '+
-                   '   _   '+
-                   '  |_|  '+
-                   '       ';
+var NUMERALS_NUMBER = 3;
+var ROMAN_ZERO = 4;
+var COLON = 5;
+var NUMERAL_HEIGHT = 6;
 
 function joinAsciiNumerals (indexesArray) {
     var indexesArray;
@@ -49,16 +53,16 @@ function joinAsciiNumerals (indexesArray) {
        i - счетчик римских цифр и знаков
        c - счетчик  столбцов */
     var j = 0;
-    while (j < 6) {
-      for (var i = 0; i < indexesArray.length; i++) {
-        var asciiNumeral = romanNumerals[indexesArray[i]];
-        var numeralWidth = asciiNumeral.length / 6;
-        for (var c = j*numeralWidth; c < j*numeralWidth + numeralWidth; c++) {
-            result += asciiNumeral[c];
+    while (j < NUMERAL_HEIGHT) {
+        for (var i = 0; i < indexesArray.length; i++) {
+            var asciiNumeral = romanNumerals[indexesArray[i]];
+            var numeralWidth = asciiNumeral.length / NUMERAL_HEIGHT;
+            for (var c = j*numeralWidth; c < j*numeralWidth + numeralWidth; c++) {
+                result += asciiNumeral[c];
+            }
         }
-      }
-      result += '\n';
-      j += 1;
+        result += '\n';
+        j += 1;
     }
     return result;
 }          
@@ -66,15 +70,16 @@ function joinAsciiNumerals (indexesArray) {
 function convertNumber(number) {
     var number;
     var j;
-    var result = '';
+    var resultIndexes = [];
     if (number == 0) {
-      resultIndexes.push(4);
+        resultIndexes.push(ROMAN_ZERO);
+        return resultIndexes;
     }
     while (number != 0) {
         /* перебираем числа, начиная с последнего, 
            в массиве arabicNumerals для того, чтобы 
            найти подходящее для записи римское число */
-        for (var i = 3; i >= 0; i--) { 
+        for (var i = NUMERALS_NUMBER; i >= 0; i--) { 
             /* j - индекс числа, которое можно вычесть
                из взятого по индексу i */
             j = i - 2 + i % 2;
@@ -89,14 +94,15 @@ function convertNumber(number) {
             }
         }
     }
+    return resultIndexes;
 }
 
 if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
     console.log('Время указано не верно!');
 }
 else {
-    convertNumber(hours);
-    resultIndexes.push(5);
-    convertNumber(minutes);
-    console.log(joinAsciiNumerals(resultIndexes)); 
+    var result = convertNumber(hours);
+    result.push(COLON);
+    result = result.concat(convertNumber(minutes));
+    console.log(joinAsciiNumerals(result));
 }
