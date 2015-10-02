@@ -41,23 +41,21 @@ var romanNumerals = [
     '       '
 ] 
 
-var NUMERALS_NUMBER = 4;
-var ROMAN_ZERO = 4;
-var COLON = 5;
-var NUMERAL_HEIGHT = 6;
-
 function joinAsciiNumerals (indexesArray) {
     var indexesArray;
     var result = '';    
+    var NUMERALS_HEIGHT = 6;
     /* j - счетчик строк
        i - счетчик римских цифр и знаков
        c - счетчик  столбцов */
     var j = 0;
-    while (j < NUMERAL_HEIGHT) {
+    
+    while (j < NUMERALS_HEIGHT) {
         for (var i = 0; i < indexesArray.length; i++) {
-            var asciiNumeral = romanNumerals[indexesArray[i]];
-            var numeralWidth = asciiNumeral.length / NUMERAL_HEIGHT;
-            for (var c = j*numeralWidth; c < j*numeralWidth + numeralWidth; c++) {
+            var numeralIndex = indexesArray[i];
+            var asciiNumeral = romanNumerals[numeralIndex];
+            var numeralWidth = asciiNumeral.length / NUMERALS_HEIGHT;
+            for (var c = j*numeralWidth; c < (j + 1)*numeralWidth; c++) {
                 result += asciiNumeral[c];
             }
         }
@@ -69,20 +67,20 @@ function joinAsciiNumerals (indexesArray) {
 
 function convertNumber(number) {
     var number;
-    var j;
     var resultIndexes = [];
     if (number == 0) {
-        resultIndexes.push(ROMAN_ZERO);
+        var ZERO_INDEX = 4;
+        resultIndexes.push(ZERO_INDEX);
         return resultIndexes;
     }
     while (number != 0) {
         /* перебираем числа, начиная с последнего, 
            в массиве arabicNumerals для того, чтобы 
            найти подходящее для записи римское число */
-        for (var i = NUMERALS_NUMBER - 1; i >= 0; i--) { 
+        for (var i = arabicNumerals.length - 1; i >= 0; i--) { 
             /* j - индекс числа, которое можно вычесть
                из взятого по индексу i */
-            j = i - 2 + i % 2;
+            var j = i - 2 + i % 2;
             while (number / arabicNumerals[i] >= 1) {
                 resultIndexes.push(i);
                 number -= arabicNumerals[i];
@@ -102,7 +100,8 @@ if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
 }
 else {
     var result = convertNumber(hours);
-    result.push(COLON);
+    var COLON_INDEX = 5;
+    result.push(COLON_INDEX);
     result = result.concat(convertNumber(minutes));
     console.log(joinAsciiNumerals(result));
 }
