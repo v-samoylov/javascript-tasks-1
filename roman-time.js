@@ -41,7 +41,7 @@ var romanNumerals = [
     '       '
 ] 
 
-var NUMERALS_NUMBER = 3;
+var NUMERALS_NUMBER = 4;
 var ROMAN_ZERO = 4;
 var COLON = 5;
 var NUMERAL_HEIGHT = 6;
@@ -79,7 +79,7 @@ function convertNumber(number) {
         /* перебираем числа, начиная с последнего, 
            в массиве arabicNumerals для того, чтобы 
            найти подходящее для записи римское число */
-        for (var i = NUMERALS_NUMBER; i >= 0; i--) { 
+        for (var i = NUMERALS_NUMBER - 1; i >= 0; i--) { 
             /* j - индекс числа, которое можно вычесть
                из взятого по индексу i */
             j = i - 2 + i % 2;
